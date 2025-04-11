@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Models\Post;
 
 class PostController extends Controller
@@ -45,6 +46,9 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // testゲートを実行
+        Gate::authorize('test');
+
         // 入力値のバリデーション
         $validated = $request->validate([
             'title' => 'required|max:20',
