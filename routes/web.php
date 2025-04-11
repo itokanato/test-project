@@ -18,11 +18,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// フォーム画面
-Route::get('/post/create', [PostController::class, 'create']);
-Route::post('/post', [PostController::class, 'store'])->name('post.store');
-
+// 投稿関連
 // 一覧画面
 Route::get('/post', [PostController::class, 'index']);
+// フォーム画面
+Route::get('/post/create', [PostController::class, 'create']);
+// 投稿
+Route::post('/post', [PostController::class, 'store'])->name('post.store');
+
 
 require __DIR__ . '/auth.php';
