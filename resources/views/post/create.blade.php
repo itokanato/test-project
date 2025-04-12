@@ -5,11 +5,12 @@
         </h2>
     </x-slot>
     <div class="max-w-7xl mx-auto px-6 ">
-        @if(session('message'))
+        <!-- @if(session('message'))
         <div class="text-red-500 font-bold">
             {{ session('message') }}
         </div>
-        @endif
+        @endif -->
+        <x-message :message="session('message')" />
         <form method="POST" action="{{ route('post.store') }}">
             @csrf
             <div class="mt-8">
@@ -23,9 +24,7 @@
             <div class="w-full flex flex-col">
                 <label for="body" class="font-semibold mt-4">本文</label>
                 <x-input-error :messages="$errors->get('body')" class="mt-2" />
-                <textarea id="body" name="body" class="w-auto py-2 border border-gray-300 rounded-md" cols="30" rows="5">
-                {{ old('body') }}
-                </textarea>
+                <textarea id="body" name="body" class="w-auto py-2 border border-gray-300 rounded-md" cols="30" rows="5">{{ old('body') }}</textarea>
             </div>
 
             <x-primary-button class="mt-4">
