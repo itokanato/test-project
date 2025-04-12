@@ -23,7 +23,8 @@ class PostController extends Controller
     public function index()
     {
         // 投稿一覧を取得する
-        $posts = Post::with('user')->get();
+        // $posts = Post::with('user')->get();
+        $posts = Post::with('user')->paginate(10);
 
         return view('post.index', compact('posts'));
     }
