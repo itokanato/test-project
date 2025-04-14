@@ -1,66 +1,335 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 備忘録
+このREADME.mdは「laravelの教科書」の内容準拠で使用したコマンドを記す備忘録です。
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+参考資料
+- https://www.socym.co.jp/download/1408/Laravel11_Support_Guide_1_0.pdf
 
-## About Laravel
+# Laravel Sail セットアップ
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 目次
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. [プロジェクト作成コマンド](#プロジェクト作成コマンド)
+2. [開発環境の起動](#開発環境の起動)
+3. [開発環境の停止](#開発環境の停止)
+4. [キャッシュのクリア](#キャッシュのクリア)
+5. [認証機能の追加](#認証機能の追加)
+   - [Breezeのセットアップ](#breezeのセットアップ)
+   - [Breezeの日本語化](#breezeの日本語化)
+6. [データベースのセットアップ](#データベースのセットアップ)
+7. [モデルとコントローラーの作成](#モデルとコントローラーの作成)
+8. [テーブル構造の変更](#テーブル構造の変更)
+9. [シーダーの作成と実行](#シーダーの作成と実行)
+10. [ファクトリーの作成](#ファクトリーの作成)
+11. [ミドルウェアの作成](#ミドルウェアの作成)
+12. [ルート一覧の確認](#ルート一覧の確認)
+13. [フロントエンドの開発サーバー起動](#フロントエンドの開発サーバー起動)
+14. [コンポーネントの作成](#コンポーネントの作成)
+15. [ページネーションのビューファイル公開](#ページネーションのビューファイル公開)
+16. [言語ファイルの公開](#言語ファイルの公開)
+17. [番外編：コマンドの短縮化](#番外編コマンドの短縮化)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## プロジェクト作成コマンド
 
-## Learning Laravel
+```bash
+curl -s https://laravel.build/プロジェクト名 | bash
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+このコマンドは以下の処理を行います：
+- DockerとDocker Composeの確認
+- 新しいLaravelプロジェクトの作成
+- Laravel Sail（Dockerベースの開発環境）のセットアップ
+- 必要なDockerコンテナの構築
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+注意：
+- このコマンドを実行するには、事前にDockerとDocker Composeがインストールされている必要があります
+- `プロジェクト名` の部分は、作成したいプロジェクトの名前に置き換えてください
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 開発環境の起動
 
-## Laravel Sponsors
+```bash
+./vendor/bin/sail up -d
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+このコマンドは以下の処理を行います：
+- 必要なDockerコンテナ（MySQL、Nginx、PHPなど）の起動
+- アプリケーションの実行環境の準備
+- 初回実行時は必要なDockerイメージのダウンロードも行います
 
-### Premium Partners
+注意：
+- プロジェクトディレクトリで実行してください
+- コンテナが起動すると、アプリケーションは `http://localhost` でアクセス可能になります
+- `-d` オプションはバックグラウンドで実行することを意味します
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 開発環境の停止
 
-## Contributing
+```bash
+./vendor/bin/sail stop
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+このコマンドは以下の処理を行います：
+- 実行中のDockerコンテナを安全に停止
+- アプリケーションの実行環境を終了
 
-## Code of Conduct
+注意：
+- 開発作業を終了する際に実行してください
+- コンテナを完全に削除したい場合は `./vendor/bin/sail down` を使用します
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## キャッシュのクリア
 
-## Security Vulnerabilities
+```bash
+./vendor/bin/sail php artisan view:clear
+./vendor/bin/sail php artisan cache:clear
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+これらのコマンドは以下の処理を行います：
+- `view:clear`: コンパイル済みのビューファイルを削除
+- `cache:clear`: アプリケーションのキャッシュをクリア
 
-## License
+注意：
+- ビューファイルを変更した後、変更が反映されない場合に実行します
+- キャッシュ関連の問題が発生した場合に実行します
+- 開発中に頻繁に使用するコマンドです
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 認証機能の追加
+
+```bash
+./vendor/bin/sail composer require laravel/breeze --dev
+```
+
+このコマンドは以下の処理を行います：
+- Laravel Breezeパッケージのインストール
+- 認証機能（ログイン、登録、パスワードリセットなど）の追加準備
+
+注意：
+- このコマンドの実行後、追加のセットアップコマンドが必要です
+- 開発環境用のパッケージとしてインストールされます（`--dev`オプション）
+
+### Breezeのセットアップ
+
+```bash
+./vendor/bin/sail artisan breeze:install
+```
+
+このコマンドは以下の処理を行います：
+- 認証に必要なビューファイルの生成
+- ルーティングの設定
+- コントローラーの生成
+- Tailwind CSSのインストール
+
+注意：
+- このコマンド実行後、フロントエンドのビルドが必要です
+- デフォルトでBladeテンプレートとTailwind CSSが使用されます
+
+### Breezeの日本語化
+
+```bash
+./vendor/bin/sail composer require askdkc/breezejp --dev
+./vendor/bin/sail artisan breezejp
+```
+
+これらのコマンドは以下の処理を行います：
+- Breeze日本語化パッケージのインストール
+- 認証関連のビュー、メッセージ、バリデーションの日本語化
+- 言語ファイルの生成と設定
+
+注意：
+- これらのコマンドはBreezeのインストール後に実行してください
+- 日本語化後も必要に応じて言語ファイルをカスタマイズできます
+
+## データベースのセットアップ
+
+```bash
+./vendor/bin/sail artisan migrate
+```
+
+このコマンドは以下の処理を行います：
+- データベースマイグレーションファイルの実行
+- 必要なテーブルの作成
+- 初期データの投入（シーダーが設定されている場合）
+
+注意：
+- このコマンドを実行する前に、データベースが起動していることを確認してください
+- 初回実行時は、usersテーブルなどの基本テーブルが作成されます
+
+## モデルとコントローラーの作成
+
+```bash
+./vendor/bin/sail artisan make:model Post -m
+./vendor/bin/sail artisan make:controller PostController
+```
+
+これらのコマンドは以下の処理を行います：
+- モデルファイルの作成（`-m`オプションでマイグレーションファイルも同時作成）
+- コントローラーファイルの作成
+- 基本的なCRUD操作のためのメソッドを自動生成
+
+注意：
+- モデル名は単数形、コントローラー名は単数形+Controllerで命名するのが一般的です
+- マイグレーションファイルは`database/migrations`ディレクトリに作成されます
+- コントローラーは`app/Http/Controllers`ディレクトリに作成されます
+
+## テーブル構造の変更
+
+```bash
+./vendor/bin/sail artisan make:migration add_user_id_column_to_posts_table --table=posts
+```
+
+このコマンドは以下の処理を行います：
+- 既存のテーブルに新しいカラムを追加するマイグレーションファイルを作成
+- マイグレーションファイル名は変更内容を表す命名規則に従います
+
+注意：
+- マイグレーションファイルは`database/migrations`ディレクトリに作成されます
+- 作成後、マイグレーションファイルを編集して具体的な変更内容を定義する必要があります
+- 変更を適用するには`migrate`コマンドを実行します
+
+## シーダーの作成と実行
+
+```bash
+./vendor/bin/sail artisan make:seeder PostSeeder
+./vendor/bin/sail artisan db:seed --class=PostSeeder
+```
+
+これらのコマンドは以下の処理を行います：
+- `make:seeder`: 新しいシーダークラスの作成
+- `db:seed`: 指定したシーダーを実行してデータベースにテストデータを投入
+
+注意：
+- シーダーは`database/seeders`ディレクトリに作成されます
+- 作成後、シーダーファイルを編集して投入するデータを定義する必要があります
+- 開発環境でのテストデータ作成に便利です
+
+## ファクトリーの作成
+
+```bash
+./vendor/bin/sail artisan make:factory PostFactory
+```
+
+このコマンドは以下の処理を行います：
+- 新しいファクトリークラスの作成
+- モデルのテストデータを生成するための定義ファイルを作成
+
+注意：
+- ファクトリーは`database/factories`ディレクトリに作成されます
+- 作成後、ファクトリーファイルを編集してデータの生成ルールを定義する必要があります
+- シーダーと組み合わせて使用することで、より柔軟なテストデータの生成が可能です
+
+## ミドルウェアの作成
+
+```bash
+./vendor/bin/sail artisan make:middleware RoleMiddleware
+```
+
+このコマンドは以下の処理を行います：
+- 新しいミドルウェアクラスの作成
+- リクエストの前処理や後処理を実装するための基本構造を提供
+
+注意：
+- ミドルウェアは`app/Http/Middleware`ディレクトリに作成されます
+- 作成後、`handle`メソッドを実装して具体的な処理を定義する必要があります
+- Laravel 12では、ミドルウェアを有効にするには`bootstrap/app.php`に登録する必要があります
+- 登録例：`$middleware->alias(['admin' => RoleMiddleware::class,]);`
+
+## ルート一覧の確認
+
+```bash
+./vendor/bin/sail artisan route:list
+```
+
+このコマンドは以下の処理を行います：
+- アプリケーションで定義されている全てのルートを表示
+- 各ルートのHTTPメソッド、URI、名前、コントローラー、アクションを確認可能
+
+注意：
+- ルートの追加や変更を確認したい場合に便利です
+- 認証ルートやAPIルートなど、全てのルートが表示されます
+
+## フロントエンドの開発サーバー起動
+
+```bash
+./vendor/bin/sail npm run dev
+```
+
+このコマンドは以下の処理を行います：
+- Vite開発サーバーの起動
+- フロントエンドのアセット（CSS、JavaScript）のコンパイルとホットリロード
+- 開発中のリアルタイムな変更反映
+
+注意：
+- フロントエンドの開発中はこのコマンドを実行したままにしておきます
+- 変更を加えると自動的にブラウザが更新されます
+- 本番環境用のビルドには`npm run build`を使用します
+
+## コンポーネントの作成
+
+```bash
+./vendor/bin/sail artisan make:component Message
+```
+
+このコマンドは以下の処理を行います：
+- 新しいBladeコンポーネントクラスとビューファイルの作成
+- 再利用可能なUI部品の作成を容易にする
+
+注意：
+- コンポーネントクラスは`app/View/Components`ディレクトリに作成されます
+- ビューファイルは`resources/views/components`ディレクトリに作成されます
+- 作成後、`<x-message />`のように使用できます
+- コンポーネントに引数を渡すことも可能です
+
+## ページネーションのビューファイル公開
+
+```bash
+./vendor/bin/sail artisan vendor:publish --tag=laravel-pagination
+```
+
+このコマンドは以下の処理を行います：
+- Laravelのデフォルトのページネーションビューを`resources/views/vendor/pagination`ディレクトリに公開
+- ページネーションのデザインをカスタマイズ可能な状態に
+
+注意：
+- 公開後は`resources/views/vendor/pagination`ディレクトリでビューファイルを編集できます
+- テンプレートエンジン（Blade）のバージョンに応じて適切なファイルが公開されます
+- アプリケーション全体のページネーションの見た目を一括で変更できます
+
+## 言語ファイルの公開
+
+```bash
+./vendor/bin/sail artisan lang:publish
+```
+
+このコマンドは以下の処理を行います：
+- 言語ファイルを`lang`ディレクトリに公開
+- デフォルトの言語ファイル（英語）をカスタマイズ可能な状態に
+
+注意：
+- このコマンドは、アプリケーションの言語ファイルをカスタマイズしたい場合に使用します
+- 公開後は`resources/lang`ディレクトリで言語ファイルを編集できます
+
+## 番外編：コマンドの短縮化
+
+WSLの`.bashrc`ファイルにエイリアスを追加することで、Sailコマンドを短縮して実行できるようになります。
+
+1. `.bashrc`ファイルを編集します：
+```bash
+nano ~/.bashrc
+```
+
+2. ファイルの最後に以下の行を追加します：
+```bash
+alias sail="./vendor/bin/sail'
+```
+
+3. 変更を反映させるために、以下のコマンドを実行します：
+```bash
+source ~/.bashrc
+```
+
+設定後は以下のように短縮してコマンドを実行できます：
+```bash
+sail up -d    # ./vendor/bin/sail up -d と同じ
+sail stop     # ./vendor/bin/sail stop と同じ
+```
+
+注意：
+- この設定は一度だけ行えば、以降のターミナルセッションでも有効です
+- 新しいターミナルを開いた場合は、自動的に設定が反映されます
